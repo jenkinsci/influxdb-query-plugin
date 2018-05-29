@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-   Provides a mechanism for determining if a new build has generated errors in OverOps.
+   Provides a mechanism for marking a build unstable based on the post build query of InfluxDB.
 </div>

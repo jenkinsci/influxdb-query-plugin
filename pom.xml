@@ -7,7 +7,7 @@
         <relativePath />
         <version>2.37</version>
     </parent>
-    <artifactId>CheckOverOps</artifactId>
+    <artifactId>influx-query</artifactId>
     <version>0.31</version>
     <packaging>hpi</packaging>
     <properties>
@@ -20,8 +20,8 @@
           ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
      -->
     </properties>
-    <name>Check OverOps</name>
-    <description>This plugin will check a build for errors in OverOps.</description>
+    <name>Influx Query</name>
+    <description>This plugin will execute an influx query and mark the build unstable based on the results.</description>
     <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
     <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
     <licenses>
@@ -150,5 +150,5 @@
     		</plugins>
     	</pluginManagement>
     </build>
-    <groupId>org.overops.plugins</groupId>
+    <groupId>org.joeo.plugins</groupId>
 </project>

@@ -2,10 +2,7 @@
 
 ## Installation
   Prequisites
-  * OverOps application deplyment naming in place 
-  https://support.overops.com/hc/en-us/articles/218437947-Naming-Your-Application-Servers-and-Deployments-
-  * OverOps configrued to send statsd metrics to influxdb 
-  https://support.overops.com/hc/en-us/articles/218438597-Publish-Metrics
+
   * Jenkins running on Java 1.7 or later
   
   1. Download CheckOverOps.hpi file from the /bin directory
@@ -16,7 +13,7 @@
 ## Global Configuration
 
   Select Manage Jenkins -> Configure Plugin 
-  scroll down to **Check OverOps Plugin**
+  scroll down to **InfluxDB Query Plugin**
   
   **OverOps InfluxDB URL:**  The complete url including port of the Influxdb e.g. http://localhost:8086 or http://host.domain.com:8086 
   
@@ -38,10 +35,6 @@
 **Retry Count**  Number of times to execute the query as a single post-build step.
 
 **Retry Interval**  Time to wait in between each query in seconds.
-
-**Query Link Field**  The field name in the database which contains the ARC link data. Defaults to _link_
-
-**ARC Link URL**  This is needed to provide ARC links in the console log.  The statsd data only contains the unique part of the link.  The ARC link (tiny link) provided by OverOps can be different from one organization to the next or if the install is on premise instead of SaaS.  Defaults to _http://tkp.to_  
 
 **Mark Build Unstable**  Check if we should mark the build unstable if the Max Record Count is exceeded.  
 

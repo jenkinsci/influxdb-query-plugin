@@ -10,7 +10,6 @@ import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Descriptor.FormException;
@@ -30,7 +29,7 @@ import net.sf.json.JSONObject;
     	private String influxPWD;
     	
     	public DescriptorImpl() {
-    			super(InfluxQuery.class);
+    			super(InfluxDBQuery.class);
             load();
         }
     	
@@ -41,7 +40,7 @@ import net.sf.json.JSONObject;
 
         @Override
         public String getDisplayName() {
-              return "Query OverOps InfluxDB";
+              return "Query InfluxDB";
           }
     	
     	
@@ -49,7 +48,7 @@ import net.sf.json.JSONObject;
      //Allows for persisting global config settings in JSONObject 
      @Override
      public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
-    	 		formData = formData.getJSONObject("CheckOverOps");
+    	 		formData = formData.getJSONObject("InfluxDBQuery");
             influxDB = formData.getString("influxDB");
             influxURL = formData.getString("influxURL");
             influxUser = formData.getString("influxUser");

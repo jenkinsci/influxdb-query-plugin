@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2018, OverOps, Inc., Joe Offenberg
+ * Copyright (c) 2018 Joe Offenberg
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -58,11 +58,10 @@ import net.sf.json.JSONObject;
 
 
 
-public class InfluxQuery extends hudson.tasks.Recorder implements SimpleBuildStep  {
+public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildStep  {
 
     private String influxQuery;
     private String queryLinkField;
-    private String ArclinkURL;
     private final int maxQueryRecordCount;
     private final int RetryCount;
     private final int RetryInt;
@@ -77,21 +76,19 @@ public class InfluxQuery extends hudson.tasks.Recorder implements SimpleBuildSte
     
 
     @DataBoundConstructor
-    public InfluxQuery(String influxQuery, 
+    public InfluxDBQuery(String influxQuery, 
     							int RetryCount, 
     							int RetryInt, 
     							int maxQueryRecordCount,
     							boolean markUnstable, 
     							boolean showResults, 
     							String queryLinkField,
-    							String ArclinkURL,
     							String influxDB, 
     							String influxUser, 
     							String influxPWD) {
         
     		this.influxQuery = influxQuery;
         this.maxQueryRecordCount = maxQueryRecordCount;
-        this.ArclinkURL = ArclinkURL;
         this.queryLinkField = queryLinkField;
         this.RetryInt = RetryInt;
         this.RetryCount = RetryCount;
@@ -102,10 +99,7 @@ public class InfluxQuery extends hudson.tasks.Recorder implements SimpleBuildSte
 
 
    
-    public String getArclinkURL() {
-        return ArclinkURL;
-    }
-    
+ 
     public String getqueryLinkField() {
         return queryLinkField;
     }
@@ -167,7 +161,7 @@ public class InfluxQuery extends hudson.tasks.Recorder implements SimpleBuildSte
 
 		while (x <= RetryCount) {
 
-			listener.getLogger().println("Check OverOps  #" + x + " from OverOps Jenkins Plugin");
+			listener.getLogger().println("Influx Query  #" + x + " from Influx Query Plugin");
 			listener.getLogger().println("Waiting " + RetryInt + " seconds.");
 			TimeUnit.SECONDS.sleep(RetryInt);
 
@@ -192,19 +186,7 @@ public class InfluxQuery extends hudson.tasks.Recorder implements SimpleBuildSte
 								 linkColumnNumber = i;}
 						}
 
-						//Append ARCLink to Links in result set but first add the trailing / if necessary
-						String NewArclinkURL;
-							if (ArclinkURL.substring(ArclinkURL.length() - 1).equals("/"))
-									{NewArclinkURL = ArclinkURL;}						
-						
-							else 	
-									{NewArclinkURL = ArclinkURL + "/";}
-						for (int i = 1; i <= queryRecordCount; i++) {
-						String originalLink = influxQueryResult.getResults().get(0).getSeries().get(0).getValues().get(i-1).get(linkColumnNumber).toString();
-						String appendedArcLink = NewArclinkURL + originalLink;
-						influxQueryResult.getResults().get(0).getSeries().get(0).getValues().get(i-1).set(linkColumnNumber, appendedArcLink);
-						
-						}
+
 						
 						// Print links to Jenkins Console
 
@@ -224,7 +206,7 @@ public class InfluxQuery extends hudson.tasks.Recorder implements SimpleBuildSte
 				ValidationCheckResult = checkValidation(influxQueryResult, maxQueryRecordCount);
 				if (ValidationCheckResult == true) {
 					if (markUnstable == true) {
-						listener.getLogger().println("OverOps vlaidation check results in Unstable build");
+						listener.getLogger().println("InfluxDB Query vlaidation check results in Unstable build");
 						x = RetryCount;
 
 						run.setResult(hudson.model.Result.UNSTABLE);

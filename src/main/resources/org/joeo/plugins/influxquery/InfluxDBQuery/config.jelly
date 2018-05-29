@@ -6,12 +6,6 @@
 	<f:entry title="Max Record Count" field="maxQueryRecordCount">
         <f:textbox />
     </f:entry>maxQueryRecordCount
-    	<f:entry title="Query Link Field" field="queryLinkField">
-        <f:textbox default="link"/>
-     </f:entry>  
-    	<f:entry title="ARC Link URL" field="ArclinkURL">
-        <f:textbox default="http://tkp.to" />
-    </f:entry>
     <f:entry title="Retry Count" field="RetryCount">
         <f:textbox default="5"/>
     </f:entry>
