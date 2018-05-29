@@ -26,15 +26,9 @@ package org.joeo.plugins.influxquery;
 
 import hudson.Launcher;
 import hudson.EnvVars;
-import hudson.Extension;
 import hudson.FilePath;
-import hudson.util.FormValidation;
-
-import hudson.model.AbstractProject;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import hudson.tasks.Publisher;
-import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 
 import org.influxdb.InfluxDB;
@@ -42,38 +36,20 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerRequest;
-
-import javax.servlet.ServletException;
-
-
 import java.io.IOException;
-import java.util.List;
-import java.util.ListIterator;
+
 import java.util.concurrent.TimeUnit;
 
 import jenkins.tasks.SimpleBuildStep;
-import net.sf.json.JSONObject;
-
-
 
 public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildStep  {
 
     private String influxQuery;
-    private String queryLinkField;
     private final int maxQueryRecordCount;
     private final int RetryCount;
     private final int RetryInt;
     private final boolean markUnstable;
     private final boolean showResults;
-
-   
-    
-
- 
-  
-    
 
     @DataBoundConstructor
     public InfluxDBQuery(String influxQuery, 
@@ -89,7 +65,6 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
         
     		this.influxQuery = influxQuery;
         this.maxQueryRecordCount = maxQueryRecordCount;
-        this.queryLinkField = queryLinkField;
         this.RetryInt = RetryInt;
         this.RetryCount = RetryCount;
         this.markUnstable = markUnstable;
@@ -98,12 +73,6 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
     }
 
 
-   
- 
-    public String getqueryLinkField() {
-        return queryLinkField;
-    }
-    
     public String getinfluxQuery() {
         return influxQuery;
     }
@@ -153,7 +122,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
 		boolean ValidationCheckResult = false;
 		int x = 1;
 		int queryRecordCount = 0;
-		int linkColumnNumber = 0;
+		
 		listener.getLogger().println("Connecting to " + influxURL + "/query?&db=" + influxDB);
 		InfluxDB influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, influxPWD);
 		String influxQueryEnv= env.expand(influxQuery);
@@ -178,28 +147,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
 					} else {
 						queryRecordCount = influxQueryResult.getResults().get(0).getSeries().get(0).getValues().size();
 						listener.getLogger().println("Query returened " + queryRecordCount + " records");
-						int columnCount = influxQueryResult.getResults().get(0).getSeries().get(0).getColumns().size();
-						// Find link column. The column count starts from 1
-						for (int i = 1; i < columnCount; i++) {
-							String ColumnName = influxQueryResult.getResults().get(0).getSeries().get(0).getColumns().get(i);								
-							if (ColumnName.equals(queryLinkField)) {
-								 linkColumnNumber = i;}
-						}
-
-
-						
-						// Print links to Jenkins Console
-
-						ListIterator<List<Object>> queryList = influxQueryResult.getResults().get(0).getSeries().get(0)
-								.getValues().listIterator();
-						while (queryList.hasNext()) {
-							// Append ArcLinkURL to Link
-							if (linkColumnNumber > 0)
-							listener.getLogger().println(queryList.next());
-						}
-
-						// Update build summary page with links
-
+						listener.getLogger().println(influxQueryResult.getResults().get(0).getSeries().get(0));
 					}
 				}
 
