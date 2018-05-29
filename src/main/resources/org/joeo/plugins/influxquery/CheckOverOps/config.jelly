@@ -1,0 +1,27 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:entry title="Influx Query" field="influxQuery">
+        <f:textbox />
+    </f:entry>
+	<f:entry title="Max Record Count" field="maxQueryRecordCount">
+        <f:textbox />
+    </f:entry>maxQueryRecordCount
+    	<f:entry title="Query Link Field" field="queryLinkField">
+        <f:textbox default="link"/>
+     </f:entry>  
+    	<f:entry title="ARC Link URL" field="ArclinkURL">
+        <f:textbox default="http://tkp.to" />
+    </f:entry>
+    <f:entry title="Retry Count" field="RetryCount">
+        <f:textbox default="5"/>
+    </f:entry>
+    <f:entry title="Retry Interval" field="RetryInt">
+        <f:textbox default="30"/>
+    </f:entry>
+    <f:entry title="Mark Build Unstable" field="markUnstable">
+        <f:checkbox/>
+    </f:entry>
+     <f:entry title="Show Query Results" field="showResults">
+        <f:checkbox/>
+    </f:entry>
+</j:jelly>
