@@ -7,8 +7,8 @@
         <relativePath />
         <version>2.37</version>
     </parent>
-    <artifactId>influx-query</artifactId>
-    <version>0.31</version>
+    <artifactId>influxdb-query</artifactId>
+    <version>0.32</version>
     <packaging>hpi</packaging>
     <properties>
         <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
@@ -20,8 +20,8 @@
           ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
      -->
     </properties>
-    <name>InfluxDB-Query</name>
-    <description>This plugin will execute an influx query and mark the build unstable based on the results.</description>
+    <name>InfluxDB Query Plugin</name>
+    <description>This plugin will execute an influxdb query and mark the build unstable based on the results.</description>
     <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
     <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
     <licenses>
