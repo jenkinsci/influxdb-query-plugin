@@ -1,14 +1,13 @@
 # InfluxDB Query Jenkins Plugin
 
+The plugin provides a mechanism for querying InfluxDB as a post build step for use as a deployment gateway.   Using a time series database to for aggregating testing and development tool data makes sense if you can query it after all the testing is complete to determine if a build is stable.  
+
 ## Installation
   Prequisites
 
   * Jenkins running on Java 1.7 or later
   
-  1. Download CheckOverOps.hpi file from the /bin directory
-  2. Select Manage Jenkins ->  Manage Plugins -> Advanced Tab
-  3. Upload a Plugin -> Choose file from saved location, click upload
-  4. Check "Restart Jenkins when installation is complete and no jobs are running."
+
 
 ## Global Configuration
 
