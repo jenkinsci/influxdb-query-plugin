@@ -10,6 +10,7 @@
     <artifactId>influxdb-query</artifactId>
     <version>0.32</version>
     <packaging>hpi</packaging>
+    <url>https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin</url>
     <properties>
         <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
         <jenkins.version>2.7.3</jenkins.version>
