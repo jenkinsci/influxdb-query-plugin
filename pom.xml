@@ -85,15 +85,13 @@
         	<version>2.5</version>
         </dependency>
     </dependencies>
-
-    <!-- If you want this to appear on the wiki page:
-    <developers>
-      <developer>
-        <id>bhacker</id>
-        <name>Bob Q. Hacker</name>
-        <email>bhacker@nowhere.net</email>
-      </developer>
-    </developers> -->
+  <developers>
+    <developer>
+      <id>joe99000</id>
+      <name>Joe Offenberg</name>
+      <email>mail@joeoffenberg.com</email>
+    </developer>
+  </developers>
 
     <!-- Assuming you want to host on @jenkinsci:
     <scm>
