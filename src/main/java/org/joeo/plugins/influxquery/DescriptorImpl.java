@@ -11,12 +11,15 @@ import org.influxdb.dto.QueryResult;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.verb.POST;
+
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
 import hudson.util.Secret;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 
 //DescriptorImpl governs the global config settings
@@ -86,18 +89,19 @@ import net.sf.json.JSONObject;
       public void setinfluxPWD(Secret influxPWD) {
           this.influxPWD = influxPWD;
       }
-//
+   
 
 
 
-
-
+   //Added @POST to help protect against CSRF 
+   @POST   
    public FormValidation doTestConnection(@QueryParameter("influxURL") final String influxURL,
         		 @QueryParameter("influxDB") final String influxDB, @QueryParameter("influxUser") final String influxUser,  @QueryParameter("influxPWD") final Secret influxPWD)
         		throws ServletException, IOException, InterruptedException  {
-
-
-      	    try {
+	   		//Admin permission check
+	   		Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER); 
+      	   
+	   		try {
 
      	    	InfluxDB influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
       	    	Query query = new Query("show measurements", influxDB);
