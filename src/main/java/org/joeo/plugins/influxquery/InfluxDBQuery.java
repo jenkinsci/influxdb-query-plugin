@@ -184,14 +184,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
 		return true;}
 		else {return false;}
 		}
-   
-
-
-
-
-
-
-    
+ 
 
 
 
