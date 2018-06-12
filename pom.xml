@@ -8,7 +8,7 @@
         <version>2.37</version>
     </parent>
     <artifactId>influxdb-query</artifactId>
-    <version>0.35</version>
+    <version>0.35-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <url>https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin</url>
     <properties>
@@ -92,13 +92,12 @@
     </developer>
   </developers>
 
-    <!-- Assuming you want to host on @jenkinsci:
     <scm>
         <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
         <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
     </scm>
-    -->
+
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
