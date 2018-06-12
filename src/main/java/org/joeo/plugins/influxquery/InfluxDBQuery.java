@@ -30,6 +30,7 @@ import hudson.FilePath;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepMonitor;
+import hudson.util.Secret;
 
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -61,7 +62,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
     							String queryLinkField,
     							String influxDB, 
     							String influxUser, 
-    							String influxPWD) {
+    							Secret influxPWD) {
         
     		this.influxQuery = influxQuery;
         this.maxQueryRecordCount = maxQueryRecordCount;
@@ -117,14 +118,14 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
 		String influxURL = getDescriptor().getinfluxURL();
 		String influxDB = getDescriptor().getinfluxDB();
 		String influxUser = getDescriptor().getinfluxUser();
-		String influxPWD =  getDescriptor().getinfluxPWD();
+		Secret influxPWD =  getDescriptor().getinfluxPWD();
 
 		boolean ValidationCheckResult = false;
 		int x = 1;
 		int queryRecordCount = 0;
 		
 		listener.getLogger().println("Connecting to " + influxURL + "/query?&db=" + influxDB);
-		InfluxDB influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, influxPWD);
+		InfluxDB influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
 		String influxQueryEnv= env.expand(influxQuery);
 		Query query = new Query(influxQueryEnv, influxDB);
 

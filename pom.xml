@@ -8,7 +8,7 @@
         <version>2.37</version>
     </parent>
     <artifactId>influxdb-query</artifactId>
-    <version>0.32</version>
+    <version>0.35</version>
     <packaging>hpi</packaging>
     <url>https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin</url>
     <properties>
@@ -23,7 +23,6 @@
     </properties>
     <name>InfluxDB Query Plugin</name>
     <description>This plugin will execute an influxdb query and mark the build unstable based on the results.</description>
-    <url>https://wiki.jenkins-ci.org/display/JENKINS/TODO+Plugin</url>
     <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
     <licenses>
         <license>
