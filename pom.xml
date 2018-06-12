@@ -8,9 +8,7 @@
         <version>2.37</version>
     </parent>
     <artifactId>influxdb-query</artifactId>
-
     <version>0.44-SNAPSHOT</version>
-
     <packaging>hpi</packaging>
     <url>https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin</url>
     <properties>
