@@ -5,7 +5,7 @@
     </f:entry>
 	<f:entry title="Max Record Count" field="maxQueryRecordCount">
         <f:textbox />
-    </f:entry>maxQueryRecordCount
+    </f:entry>
     <f:entry title="Retry Count" field="RetryCount">
         <f:textbox default="5"/>
     </f:entry>
