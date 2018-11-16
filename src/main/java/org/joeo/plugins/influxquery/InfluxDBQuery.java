@@ -123,10 +123,10 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
             throws InterruptedException, IOException {
         final EnvVars env = run.getEnvironment(listener);
 
-        String influxURL = getDescriptor().getinfluxURL();
-        String influxDB = getDescriptor().getinfluxDB();
-        String influxUser = getDescriptor().getinfluxUser();
-        Secret influxPWD = getDescriptor().getinfluxPWD();
+        String influxURL = getDescriptor().getInfluxURL();
+        String influxDB = getDescriptor().getInfluxDB();
+        String influxUser = getDescriptor().getInfluxUser();
+        Secret influxPWD = getDescriptor().getInfluxPWD();
 
         boolean validationCheckResult = false;
         int x = 0;
@@ -200,9 +200,9 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
     /**
      * set aside for more sophisticated validation in the future
      * 
-     * @param queryResult
-     * @param maxQueryRecordCount
-     * @return
+     * @param queryResult {@link QueryResult} Influx query result
+     * @param maxQueryRecordCount if exceeded validation is true
+     * @return true if number of records in queryResult is higher than maxQueryRecordCount 
      */
     public boolean checkValidation(QueryResult queryResult, int maxQueryRecordCount) {
         int queryRecordCount = queryResult.getResults().get(0).getSeries().get(0).getValues().size();
