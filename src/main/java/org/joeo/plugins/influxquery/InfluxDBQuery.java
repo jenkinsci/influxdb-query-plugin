@@ -32,6 +32,7 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,33 +48,50 @@ import jenkins.tasks.SimpleBuildStep;
 public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildStep {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBQuery.class);
     private String influxQuery;
-    private final int maxQueryRecordCount;
-    private final int retryCount;
-    private final int retryInterval;
-    private final boolean markUnstable;
-    private final boolean showResults;
+    private int maxQueryRecordCount;
+    private int retryCount;
+    private int retryInterval;
+    private boolean markUnstable;
+    private boolean showResults;
 
     @DataBoundConstructor
-    public InfluxDBQuery(String influxQuery, int retryCount, int retryInterval, int maxQueryRecordCount,
-            boolean markUnstable, boolean showResults, String queryLinkField, String influxDB, String influxUser,
-            Secret influxPWD) {
+    public InfluxDBQuery(String influxQuery) {
         this.influxQuery = influxQuery;
+    }
+
+    @DataBoundSetter public void setInfluxQuery(String influxQuery) {
+        this.influxQuery = influxQuery;
+    }
+
+    @DataBoundSetter public void setMaxQueryRecordCount(int maxQueryRecordCount) {
         this.maxQueryRecordCount = maxQueryRecordCount;
-        this.retryInterval = retryInterval;
+    }
+
+    @DataBoundSetter public void setRetryCount(int retryCount) {
         this.retryCount = retryCount;
+    }
+
+    @DataBoundSetter public void setRetryInterval(int retryInterval) {
+        this.retryInterval = retryInterval;
+    }
+
+    @DataBoundSetter public void setMarkUnstable(boolean markUnstable) {
         this.markUnstable = markUnstable;
+    }
+
+    @DataBoundSetter public void setShowResults(boolean showResults) {
         this.showResults = showResults;
     }
 
-    public String getinfluxQuery() {
+    public String getInfluxQuery() {
         return influxQuery;
     }
 
-    public int getmaxQueryRecordCount() {
+    public int getMaxQueryRecordCount() {
         return maxQueryRecordCount;
     }
 
-    public int getRetryInt() {
+    public int getRetryInterval() {
         return retryInterval;
     }
 
@@ -81,11 +99,11 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
         return retryCount;
     }
 
-    public boolean getmarkUnstable() {
+    public boolean getMarkUnstable() {
         return markUnstable;
     }
 
-    public boolean getshowResults() {
+    public boolean getShowResults() {
         return showResults;
     }
 
