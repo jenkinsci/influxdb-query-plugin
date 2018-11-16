@@ -129,19 +129,19 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
         Secret influxPWD = getDescriptor().getInfluxPWD();
 
         boolean validationCheckResult = false;
-        int x = 0;
+        int currentRetry = 0;
         int queryRecordCount = 0;
 
-        listener.getLogger().println("Connecting to " + influxURL + "/query?&db=" + influxDB);
+        listener.getLogger().println("Connecting to url:" + influxURL + ", db:" + influxDB+", user:"+ influxUser);
         InfluxDB influxDBClient = null;
         try {
             influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
             String influxQueryEnv = env.expand(influxQuery);
             Query query = new Query(influxQueryEnv, influxDB);
 
-            while (x < retryCount) {
-                listener.getLogger().println("Influx Query  #" + x + " from Influx Query Plugin");
-                if(x > 0) {
+            while (currentRetry <= retryCount) {
+                listener.getLogger().println("Running Influx Query:"+query.getCommandWithUrlEncoded()+", retry:" + currentRetry + " from Influx Query Plugin");
+                if(currentRetry > 0) {
                     listener.getLogger().println("Waiting " + retryInterval + " seconds before retry.");
                     TimeUnit.SECONDS.sleep(retryInterval);
                 }
@@ -152,7 +152,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
                         String EmptyReturn = influxQueryResult.getResults().toString();
                         if (EmptyReturn.contains("series=null")) {
                             queryRecordCount = 0;
-                            listener.getLogger().println("Query returened 0 records");
+                            listener.getLogger().println("Query returned 0 records");
                         } else {
                             queryRecordCount = influxQueryResult.getResults().get(0).getSeries().get(0).getValues()
                                     .size();
@@ -160,25 +160,24 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
                             listener.getLogger().println(influxQueryResult.getResults().get(0).getSeries().get(0));
                         }
                     }
-
                     validationCheckResult = checkValidation(influxQueryResult, maxQueryRecordCount);
                     if (validationCheckResult) {
                         if (markUnstable) {
-                            listener.getLogger().println("InfluxDB Query returned more results than max accepted, will mark Unstable build");
+                            listener.getLogger().println("InfluxDB Query returned more results than max accepted:"+maxQueryRecordCount+", will mark Unstable build");
                             run.setResult(hudson.model.Result.UNSTABLE);
                             break;
                         }
-                        listener.getLogger().println("InfluxDB Query returned more results than max accepted, but build will not be marked as Unstable as per your configuration");
+                        listener.getLogger().println("InfluxDB Query returned more results than max accepted:"+maxQueryRecordCount+", but build will not be marked as Unstable as per your configuration");
                     } else {
                         listener.getLogger().println("InfluxDB Query returned more results than max accepted"+maxQueryRecordCount);
                         break;
                     }
                 } catch (Exception e) {
-                    listener.getLogger().println("Error running query=" + query + ", retry number="+retryCount+", message:" + e.getMessage());
+                    listener.getLogger().println("Error running query:" + query.getCommandWithUrlEncoded() + ", current retry:"+currentRetry+", max retries:"+retryCount+", message:" + e.getMessage());
                 }
-                x++;
+                currentRetry++;
             }
-            if(x==retryCount) {
+            if(currentRetry>retryCount) {
                 listener.getLogger().println("Max number of retries "+retryCount+" reached without being able to compute result");
                 if (markUnstable) {
                     run.setResult(hudson.model.Result.UNSTABLE);
