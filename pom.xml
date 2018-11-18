@@ -8,7 +8,7 @@
         <version>2.37</version>
     </parent>
     <artifactId>influxdb-query</artifactId>
-    <version>0.45-SNAPSHOT</version>
+    <version>0.45</version>
     <packaging>hpi</packaging>
     <url>https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin</url>
     <properties>
@@ -95,7 +95,7 @@
   <connection>scm:git:ssh://github.com/jenkinsci/influxdb-query-plugin.git</connection>
   <developerConnection>scm:git:ssh://git@github.com/jenkinsci/influxdb-query-plugin.git</developerConnection>
   <url>https://github.com/jenkinsci/influxdb-query-plugin</url>
-    <tag>influxdb-query-0.42</tag>
+    <tag>influxdb-query-0.45</tag>
   </scm>
     <repositories>
         <repository>
