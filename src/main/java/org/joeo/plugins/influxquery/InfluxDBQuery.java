@@ -45,7 +45,7 @@ import hudson.tasks.BuildStepMonitor;
 import hudson.util.Secret;
 import jenkins.tasks.SimpleBuildStep;
 
-public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildStep {
+public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildStep {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBQuery.class);
     private String influxQuery;
     private int maxQueryRecordCount;
@@ -140,7 +140,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
             Query query = new Query(influxQueryEnv, influxDB);
 
             while (currentRetry <= retryCount) {
-                listener.getLogger().println("Running Influx Query:"+query.getCommandWithUrlEncoded()+", retry:" + currentRetry + " from Influx Query Plugin");
+                listener.getLogger().println("Running Influx Query:"+query.getCommand()+", retry:" + currentRetry + " from Influx Query Plugin");
                 if(currentRetry > 0) {
                     listener.getLogger().println("Waiting " + retryInterval + " seconds before retry.");
                     TimeUnit.SECONDS.sleep(retryInterval);
@@ -169,11 +169,11 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
                         }
                         listener.getLogger().println("InfluxDB Query returned more results than max accepted:"+maxQueryRecordCount+", but build will not be marked as Unstable as per your configuration");
                     } else {
-                        listener.getLogger().println("InfluxDB Query returned more results than max accepted"+maxQueryRecordCount);
+                        listener.getLogger().println("InfluxDB Query returned less results than max accepted:"+maxQueryRecordCount);
                         break;
                     }
                 } catch (Exception e) {
-                    listener.getLogger().println("Error running query:" + query.getCommandWithUrlEncoded() + ", current retry:"+currentRetry+", max retries:"+retryCount+", message:" + e.getMessage());
+                    listener.getLogger().println("Error running query:" + query.getCommand() + ", current retry:"+currentRetry+", max retries:"+retryCount+", message:" + e.getMessage());
                 }
                 currentRetry++;
             }
