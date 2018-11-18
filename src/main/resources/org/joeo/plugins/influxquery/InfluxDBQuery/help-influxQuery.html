@@ -1,3 +1,5 @@
 <div>
-    InfluxDB select query to return errors pertaining to the current build. May use Jenkins tokens such as build number in the query. e.g. select * from DevOps where application = 'ArchRival2.1' deployment = '2-1-$BUILD_NUMBER'
+    InfluxDB select query supposed to return 1 value. 
+    It can be a sum, count or function returning only one value. 
+    May use Jenkins tokens such as build number in the query. e.g. select * from DevOps where application = 'ArchRival2.1' deployment = '2-1-$BUILD_NUMBER'
 </div>

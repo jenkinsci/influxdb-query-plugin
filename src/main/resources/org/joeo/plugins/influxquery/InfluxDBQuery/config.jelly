@@ -3,7 +3,7 @@
     <f:entry title="Influx Query" field="influxQuery">
         <f:textbox />
     </f:entry>
-	<f:entry title="Max Record Count" field="maxQueryRecordCount">
+	<f:entry title="Expected threshold" field="expectedThreshold">
         <f:textbox />
     </f:entry>
     <f:entry title="Retry Count" field="retryCount">
