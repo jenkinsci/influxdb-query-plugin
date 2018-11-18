@@ -89,6 +89,11 @@
       <name>Joe Offenberg</name>
       <email>mail@joeoffenberg.com</email>
     </developer>
+    <developer>
+      <id>pmouawad</id>
+      <name>Philippe Mouawad</name>
+      <email>p.mouawad@ubik-ingenierie.com</email>
+    </developer>
   </developers>
 
   <scm>
