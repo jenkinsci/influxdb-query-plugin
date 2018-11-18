@@ -86,35 +86,35 @@ public final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         return false;
     }
 
-    public String getinfluxDB() {
+    public String getInfluxDB() {
         return influxDB;
     }
 
-    public String getinfluxURL() {
+    public String getInfluxURL() {
         return influxURL;
     }
 
-    public String getinfluxUser() {
+    public String getInfluxUser() {
         return influxUser;
     }
 
-    public Secret getinfluxPWD() {
+    public Secret getInfluxPWD() {
         return influxPWD;
     }
 
-    public void setinfluxDB(String influxDB) {
+    public void setInfluxDB(String influxDB) {
         this.influxDB = influxDB;
     }
 
-    public void setinfluxURL(String influxURL) {
+    public void setInfluxURL(String influxURL) {
         this.influxURL = influxURL;
     }
 
-    public void setinfluxUser(String influxUser) {
+    public void setInfluxUser(String influxUser) {
         this.influxUser = influxUser;
     }
 
-    public void setinfluxPWD(Secret influxPWD) {
+    public void setInfluxPWD(Secret influxPWD) {
         this.influxPWD = influxPWD;
     }
 

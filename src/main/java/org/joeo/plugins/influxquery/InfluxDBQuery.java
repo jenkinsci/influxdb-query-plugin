@@ -32,6 +32,7 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,33 +48,50 @@ import jenkins.tasks.SimpleBuildStep;
 public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildStep {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBQuery.class);
     private String influxQuery;
-    private final int maxQueryRecordCount;
-    private final int retryCount;
-    private final int retryInterval;
-    private final boolean markUnstable;
-    private final boolean showResults;
+    private int maxQueryRecordCount;
+    private int retryCount;
+    private int retryInterval;
+    private boolean markUnstable;
+    private boolean showResults;
 
     @DataBoundConstructor
-    public InfluxDBQuery(String influxQuery, int retryCount, int retryInterval, int maxQueryRecordCount,
-            boolean markUnstable, boolean showResults, String queryLinkField, String influxDB, String influxUser,
-            Secret influxPWD) {
+    public InfluxDBQuery(String influxQuery) {
         this.influxQuery = influxQuery;
+    }
+
+    @DataBoundSetter public void setInfluxQuery(String influxQuery) {
+        this.influxQuery = influxQuery;
+    }
+
+    @DataBoundSetter public void setMaxQueryRecordCount(int maxQueryRecordCount) {
         this.maxQueryRecordCount = maxQueryRecordCount;
-        this.retryInterval = retryInterval;
+    }
+
+    @DataBoundSetter public void setRetryCount(int retryCount) {
         this.retryCount = retryCount;
+    }
+
+    @DataBoundSetter public void setRetryInterval(int retryInterval) {
+        this.retryInterval = retryInterval;
+    }
+
+    @DataBoundSetter public void setMarkUnstable(boolean markUnstable) {
         this.markUnstable = markUnstable;
+    }
+
+    @DataBoundSetter public void setShowResults(boolean showResults) {
         this.showResults = showResults;
     }
 
-    public String getinfluxQuery() {
+    public String getInfluxQuery() {
         return influxQuery;
     }
 
-    public int getmaxQueryRecordCount() {
+    public int getMaxQueryRecordCount() {
         return maxQueryRecordCount;
     }
 
-    public int getRetryInt() {
+    public int getRetryInterval() {
         return retryInterval;
     }
 
@@ -81,11 +99,11 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
         return retryCount;
     }
 
-    public boolean getmarkUnstable() {
+    public boolean getMarkUnstable() {
         return markUnstable;
     }
 
-    public boolean getshowResults() {
+    public boolean getShowResults() {
         return showResults;
     }
 
@@ -105,25 +123,25 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
             throws InterruptedException, IOException {
         final EnvVars env = run.getEnvironment(listener);
 
-        String influxURL = getDescriptor().getinfluxURL();
-        String influxDB = getDescriptor().getinfluxDB();
-        String influxUser = getDescriptor().getinfluxUser();
-        Secret influxPWD = getDescriptor().getinfluxPWD();
+        String influxURL = getDescriptor().getInfluxURL();
+        String influxDB = getDescriptor().getInfluxDB();
+        String influxUser = getDescriptor().getInfluxUser();
+        Secret influxPWD = getDescriptor().getInfluxPWD();
 
         boolean validationCheckResult = false;
-        int x = 0;
+        int currentRetry = 0;
         int queryRecordCount = 0;
 
-        listener.getLogger().println("Connecting to " + influxURL + "/query?&db=" + influxDB);
+        listener.getLogger().println("Connecting to url:" + influxURL + ", db:" + influxDB+", user:"+ influxUser);
         InfluxDB influxDBClient = null;
         try {
             influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
             String influxQueryEnv = env.expand(influxQuery);
             Query query = new Query(influxQueryEnv, influxDB);
 
-            while (x < retryCount) {
-                listener.getLogger().println("Influx Query  #" + x + " from Influx Query Plugin");
-                if(x > 0) {
+            while (currentRetry <= retryCount) {
+                listener.getLogger().println("Running Influx Query:"+query.getCommandWithUrlEncoded()+", retry:" + currentRetry + " from Influx Query Plugin");
+                if(currentRetry > 0) {
                     listener.getLogger().println("Waiting " + retryInterval + " seconds before retry.");
                     TimeUnit.SECONDS.sleep(retryInterval);
                 }
@@ -134,7 +152,7 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
                         String EmptyReturn = influxQueryResult.getResults().toString();
                         if (EmptyReturn.contains("series=null")) {
                             queryRecordCount = 0;
-                            listener.getLogger().println("Query returened 0 records");
+                            listener.getLogger().println("Query returned 0 records");
                         } else {
                             queryRecordCount = influxQueryResult.getResults().get(0).getSeries().get(0).getValues()
                                     .size();
@@ -142,25 +160,24 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
                             listener.getLogger().println(influxQueryResult.getResults().get(0).getSeries().get(0));
                         }
                     }
-
                     validationCheckResult = checkValidation(influxQueryResult, maxQueryRecordCount);
                     if (validationCheckResult) {
                         if (markUnstable) {
-                            listener.getLogger().println("InfluxDB Query returned more results than max accepted, will mark Unstable build");
+                            listener.getLogger().println("InfluxDB Query returned more results than max accepted:"+maxQueryRecordCount+", will mark Unstable build");
                             run.setResult(hudson.model.Result.UNSTABLE);
                             break;
                         }
-                        listener.getLogger().println("InfluxDB Query returned more results than max accepted, but build will not be marked as Unstable as per your configuration");
+                        listener.getLogger().println("InfluxDB Query returned more results than max accepted:"+maxQueryRecordCount+", but build will not be marked as Unstable as per your configuration");
                     } else {
                         listener.getLogger().println("InfluxDB Query returned more results than max accepted"+maxQueryRecordCount);
                         break;
                     }
                 } catch (Exception e) {
-                    listener.getLogger().println("Error running query=" + query + ", retry number="+retryCount+", message:" + e.getMessage());
+                    listener.getLogger().println("Error running query:" + query.getCommandWithUrlEncoded() + ", current retry:"+currentRetry+", max retries:"+retryCount+", message:" + e.getMessage());
                 }
-                x++;
+                currentRetry++;
             }
-            if(x==retryCount) {
+            if(currentRetry>retryCount) {
                 listener.getLogger().println("Max number of retries "+retryCount+" reached without being able to compute result");
                 if (markUnstable) {
                     run.setResult(hudson.model.Result.UNSTABLE);
@@ -182,9 +199,9 @@ public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildS
     /**
      * set aside for more sophisticated validation in the future
      * 
-     * @param queryResult
-     * @param maxQueryRecordCount
-     * @return
+     * @param queryResult {@link QueryResult} Influx query result
+     * @param maxQueryRecordCount if exceeded validation is true
+     * @return true if number of records in queryResult is higher than maxQueryRecordCount 
      */
     public boolean checkValidation(QueryResult queryResult, int maxQueryRecordCount) {
         int queryRecordCount = queryResult.getResults().get(0).getSeries().get(0).getValues().size();
