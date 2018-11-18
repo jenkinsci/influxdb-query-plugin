@@ -148,7 +148,7 @@ public final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
                 try {
                     influxDBClient.close();
                 } catch (Exception e) {
-                    // NOOP
+                	LOGGER.error(e.getMessage());
                 }
             }
         }
