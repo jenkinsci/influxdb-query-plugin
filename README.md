@@ -7,13 +7,10 @@ Using a time series database to for aggregating testing and development tool dat
   Prequisites
 
   * Jenkins running on Java 1.7 or later
-  
-
 
 ## Global Configuration
 
-  Select Manage Jenkins -> Configure Plugin 
-  scroll down to **InfluxDB Query Plugin**
+  Select **Manage Jenkins** -> *Configure System*, scroll down to **InfluxDB Query Plugin**
   
   * **InfluxDB URL:**  The complete url including port of the Influxdb e.g. http://localhost:8086 or http://host.domain.com:8086 
   
@@ -23,10 +20,15 @@ Using a time series database to for aggregating testing and development tool dat
   
   * **InfluxDB Password**  Password for InfluxDB user.
   
-Test connection would show you a count of available metrics.  If the count shows 0 measurements, credentials are correct but    database may be wrong.  If credentials are incorrect you will receive an authentication error.
+Test connection would show you a count of available metrics.  If the count shows 0 measurements, credentials are correct but database may be wrong.  
+
+If credentials are incorrect you will receive an authentication error.
   
 
-## Job Post Build Configuration
+## Job Post Step Configuration
+
+	On Job, select **Add Post-build step**, select **Query InfluxDB** then configure: 
+
   * **Check Name** Name for the check to be run, it is display in console for better understanding of performed check.
   * **Influx Query**  InfluxDB select query supposed to return 1 value. 
     It can be a sum, count or function returning only one value. 
@@ -41,3 +43,5 @@ Test connection would show you a count of available metrics.  If the count shows
   * **Mark Build Unstable**  Check if we should mark the build unstable if the Max Record Count is exceeded.  
 
   * **Show Query Results**  Check if we should should display the query results in the Jenkins console.
+
+  You can configure multiple Queries.
