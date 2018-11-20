@@ -27,7 +27,7 @@ If credentials are incorrect you will receive an authentication error.
 
 ## Job Post Step Configuration
 
-	On Job, select **Add Post-build step**, select **Query InfluxDB** then configure: 
+ On Job, select **Add Post-build step**, select **Query InfluxDB** then configure: 
 
   * **Check Name** Name for the check to be run, it is display in console for better understanding of performed check.
   * **Influx Query**  InfluxDB select query supposed to return 1 value. 
