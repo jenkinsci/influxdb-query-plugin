@@ -14,7 +14,11 @@ Using a time series database to for aggregating testing and development tool dat
 
 ## Global Configuration
 
-  Select **Manage Jenkins** -> *Configure System*, scroll down to **InfluxDB Query Plugin**
+  Select **Manage Jenkins** -> *Configure System*, scroll to **InfluxDB Query Plugin**
+  
+
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/screenshots/JENKINS_INFLUXDB_PLUGIN_CONFIG.png)
+
   
   * **InfluxDB URL:**  The complete url including port of the Influxdb e.g. http://localhost:8086 or http://host.domain.com:8086 
   
@@ -31,7 +35,13 @@ If credentials are incorrect you will receive an authentication error.
 
 ## Job Post Step Configuration
 
- On Job, select **Add Post-build step**, select **Query InfluxDB** then configure: 
+ On Job, select **Add Post-build step**, select **Query InfluxDB**:
+ 
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/screenshots/JENKINS_INFLUXDB_PLUGIN_ADD_POST_BUILD_STEP.png)
+ 
+Then configure:
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/screenshots/JENKINS_INFLUXDB_PLUGIN_POST_BUILD_STEP_CONFIG.png)
+
 
   * **Check Name** Name for the check to be run, it is display in console for better understanding of performed check.
   * **Influx Query**  InfluxDB select query supposed to return 1 value. 
