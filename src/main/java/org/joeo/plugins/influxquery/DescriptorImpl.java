@@ -24,10 +24,6 @@
 
 package org.joeo.plugins.influxquery;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
@@ -122,15 +118,14 @@ public final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
     @POST
     public FormValidation doTestConnection(@QueryParameter("influxURL") final String influxURL,
             @QueryParameter("influxDB") final String influxDB, @QueryParameter("influxUser") final String influxUser,
-            @QueryParameter("influxPWD") final Secret influxPWD)
-            throws ServletException, IOException, InterruptedException {
+            @QueryParameter("influxPWD") final Secret influxPWD) {
         // Admin permission check
         Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER);
         InfluxDB influxDBClient = null;
         try {
             influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
             Query query = new Query("show measurements", influxDB);
-            LOGGER.info("Testing query from Jenkins Plugin with url:{}", influxURL + "/" + influxDB);
+            LOGGER.info("Testing query from Jenkins Plugin with url:{}, db:{}", influxURL, influxDB);
             QueryResult result = influxDBClient.query(query);
             int numMeasurements = result.getResults().get(0).getSeries().get(0).getValues().size();
             LOGGER.info("Connection Successful. Found {} measurements", numMeasurements);

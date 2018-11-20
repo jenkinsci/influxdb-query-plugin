@@ -1,9 +1,12 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:entry title="Check Name" field="checkName">
+        <f:textbox />
+    </f:entry>
     <f:entry title="Influx Query" field="influxQuery">
         <f:textbox />
     </f:entry>
-	<f:entry title="Max Record Count" field="maxQueryRecordCount">
+	<f:entry title="Expected threshold" field="expectedThreshold">
         <f:textbox />
     </f:entry>
     <f:entry title="Retry Count" field="retryCount">
