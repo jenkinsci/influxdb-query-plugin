@@ -7,6 +7,7 @@
         <relativePath />
         <version>2.37</version>
     </parent>
+    <groupId>org.joeo.plugins</groupId>
     <artifactId>influxdb-query</artifactId>
     <version>0.46-SNAPSHOT</version>
     <packaging>hpi</packaging>
@@ -151,5 +152,4 @@
     		</plugins>
     	</pluginManagement>
     </build>
-    <groupId>org.joeo.plugins</groupId>
 </project>
