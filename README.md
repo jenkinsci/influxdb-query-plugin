@@ -36,7 +36,7 @@ If credentials are incorrect you will receive an authentication error.
 
  On Job, select **Add Post-build step**, select **Query InfluxDB**:
  
-![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_CONFIG.png)
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_ADD_POST_BUILD_STEP.png)
  
 Then configure:
 ![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_POST_BUILD_STEP_CONFIG.png)
