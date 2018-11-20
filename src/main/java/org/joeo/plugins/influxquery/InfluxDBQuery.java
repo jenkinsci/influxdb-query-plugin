@@ -48,7 +48,7 @@ import jenkins.tasks.SimpleBuildStep;
  * Executes an InfluxDB query supposed to return 1 row and compares result with expected threshold.
  * If result is above it marks build as unstable.
  */
-public class InfluxDBQuery extends hudson.tasks.Recorder implements SimpleBuildStep {
+public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildStep {
     private String checkName;
     private String influxQuery;
     private double expectedThreshold;

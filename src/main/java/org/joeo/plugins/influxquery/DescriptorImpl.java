@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Publisher;
+import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import hudson.util.Secret;
 import jenkins.model.Jenkins;
@@ -48,7 +48,7 @@ import net.sf.json.JSONObject;
 
 @Extension
 @Symbol("influxDbQuery")
-public final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
+public final class DescriptorImpl extends BuildStepDescriptor<Builder> {
     private static final Logger LOGGER = LoggerFactory.getLogger(InfluxDBQuery.class);
     private String influxDB;
     private String influxURL;
