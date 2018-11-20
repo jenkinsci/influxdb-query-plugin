@@ -16,7 +16,7 @@ Using a time series database to for aggregating testing and development tool dat
 
   Select **Manage Jenkins** -> *Configure System*, scroll to **InfluxDB Query Plugin**
   
-![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_ADD_POST_BUILD_STEP.png)
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_CONFIG.png)
 
   
   * **InfluxDB URL:**  The complete url including port of the Influxdb e.g. http://localhost:8086 or http://host.domain.com:8086 
