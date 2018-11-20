@@ -16,8 +16,7 @@ Using a time series database to for aggregating testing and development tool dat
 
   Select **Manage Jenkins** -> *Configure System*, scroll to **InfluxDB Query Plugin**
   
-
-![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/screenshots/JENKINS_INFLUXDB_PLUGIN_CONFIG.png)
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_ADD_POST_BUILD_STEP.png)
 
   
   * **InfluxDB URL:**  The complete url including port of the Influxdb e.g. http://localhost:8086 or http://host.domain.com:8086 
@@ -37,10 +36,10 @@ If credentials are incorrect you will receive an authentication error.
 
  On Job, select **Add Post-build step**, select **Query InfluxDB**:
  
-![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/screenshots/JENKINS_INFLUXDB_PLUGIN_ADD_POST_BUILD_STEP.png)
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_ADD_POST_BUILD_STEP.png)
  
 Then configure:
-![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/screenshots/JENKINS_INFLUXDB_PLUGIN_POST_BUILD_STEP_CONFIG.png)
+![Plugin configuration](https://raw.githubusercontent.com/jenkinsci/influxdb-query-plugin/master/screenshots/JENKINS_INFLUXDB_PLUGIN_POST_BUILD_STEP_CONFIG.png)
 
 
   * **Check Name** Name for the check to be run, it is display in console for better understanding of performed check.
