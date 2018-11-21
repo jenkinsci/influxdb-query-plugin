@@ -12,7 +12,7 @@ Using a time series database to for aggregating testing and development tool dat
 
   * Jenkins running on Java 1.7 or later
 
-## Jenkins documentations:
+## Jenkins documentations
 
   * [Plugin page on plugins.jenkins.io](https://plugins.jenkins.io/influxdb-query)
 
