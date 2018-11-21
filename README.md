@@ -12,6 +12,14 @@ Using a time series database to for aggregating testing and development tool dat
 
   * Jenkins running on Java 1.7 or later
 
+## Jenkins documentations:
+
+  * [Plugin page on plugins.jenkins.io](https://plugins.jenkins.io/influxdb-query)
+
+  * [Jenkins wiki of plugin](https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin)
+
+  * [Pipeline documentation syntax of plugin](https://jenkins.io/doc/pipeline/steps/influxdb-query/)
+
 ## Global Configuration
 
   Select **Manage Jenkins** -> *Configure System*, scroll to **InfluxDB Query Plugin**
@@ -45,8 +53,15 @@ Then configure:
   * **Check Name** Name for the check to be run, it is display in console for better understanding of performed check.
   * **Influx Query**  InfluxDB select query supposed to return 1 value. 
     It can be a sum, count or function returning only one value. 
-    May use Jenkins tokens such as build number in the query. e.g. 
+    May use Jenkins tokens such as build number in the query. e.g.
+    
+         select count(errors) from DevOps where application = 'ArchRival2.1' deployment = '2-1-$BUILD_NUMBER'
 
+   It may also be a query against any metric in [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/) that is filled by a step of the build, for example if you run a Load Test with 
+   [Apache JMeter](https://jmeter.apache.org) with an [InfluxDB Backend Listener](https://jmeter.apache.org/usermanual/component_reference.html#Backend_Listener), you could query the errors to fail a build:
+   
+        select mean(avg) from jmeter where transaction = 'all'
+     
   * **Expected Threshold**  Threshold for the value returned by query result. If exceeded and if Mark Build Unstable is selected, the build will be marked unstable.
 
   * **Retry Count**  Number of times to execute the query as a single post-build step.
