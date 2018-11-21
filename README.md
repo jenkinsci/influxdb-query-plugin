@@ -3,6 +3,8 @@
 
 
 [![License](http://img.shields.io/:license-mit-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://ci.jenkins.io/job/Plugins/job/influxdb-query-plugin/job/master/badge/icon)](https://ci.jenkins.io/job/Plugins/job/influxdb-query-plugin/job/master/)
+[![Jenkins Plugins](https://img.shields.io/jenkins/plugin/v/influxdb-query.svg)](https://plugins.jenkins.io/influxdb-query)
 
 The plugin provides a mechanism for querying InfluxDB as a post build step for use as a deployment gateway.   
 Using a time series database to for aggregating testing and development tool data makes sense if you can query it after all the testing is complete to determine if a build is stable.
