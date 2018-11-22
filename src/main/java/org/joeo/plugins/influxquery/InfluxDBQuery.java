@@ -133,7 +133,8 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
         int queryRecordCount = 0;
 
         PrintStream logger = listener.getLogger();
-        logger.println("Connecting to url:" + influxURL + ", db:" + influxDB+", user:"+ influxUser);
+        LoggerUtils loggerUtils = new LoggerUtils(logger);
+        loggerUtils.info("Connecting to url:" + influxURL + ", db:" + influxDB+", user:"+ influxUser);
         InfluxDB influxDBClient = null;
         try {
             influxDBClient = InfluxDBUtils.getConnection(influxURL, influxDB, influxUser, influxPWD);
@@ -141,25 +142,25 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
             Query query = new Query(influxQueryEnv, influxDB);
 
             while (currentRetry <= retryCount) {
-                logger.println("==================== Running Check:"+getCheckName()+" ====================");
-                logger.println("Running Influx Query:"+query.getCommand()+", retry:" + currentRetry + " from Influx Query Plugin");
+                loggerUtils.info("==================== Running Check:"+getCheckName()+" ====================");
+                loggerUtils.info("Running Influx Query:"+query.getCommand()+", retry:" + currentRetry + " from Influx Query Plugin");
                 if(currentRetry > 0) {
-                    logger.println("Waiting " + retryInterval + " seconds before retry.");
+                    loggerUtils.info("Waiting " + retryInterval + " seconds before retry.");
                     TimeUnit.SECONDS.sleep(retryInterval);
                 }
                 try {
                     QueryResult influxQueryResult = influxDBClient.query(query);
                     if (showResults) {
-                        logger.println(influxQueryEnv);
+                        loggerUtils.info("Results for query:"+influxQueryEnv);
                         String emptyReturn = influxQueryResult.getResults().toString();
                         if (emptyReturn.contains("series=null")) {
                             queryRecordCount = 0;
-                            logger.println("Query returned 0 records");
+                            loggerUtils.warn("Query returned 0 records");
                         } else {
                             queryRecordCount = influxQueryResult.getResults().get(0).getSeries().get(0).getValues()
                                     .size();
-                            logger.println("Query returned " + queryRecordCount + " records");
-                            logger.println(influxQueryResult.getResults().get(0).getSeries().get(0));
+                            loggerUtils.info("Query returned " + queryRecordCount + " records:");
+                            loggerUtils.info(""+influxQueryResult.getResults().get(0).getSeries().get(0));
                         }
                     }
                     Double result = null;
@@ -169,33 +170,34 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
                         fail = result > expectedThreshold;
                     } 
 
-                    logger.println("InfluxDB Query "+ query.getCommand() + " returned :"+result);
+                    loggerUtils.info("InfluxDB Query "+ query.getCommand() + " returned :"+result);
                     if (result == null) {
-                        logger.println("InfluxDB Query returned no results");
+                        loggerUtils.warn("InfluxDB Query returned no results");
                     } else {
                         if (fail) {
                             if (markUnstable) {
-                                logger.println("InfluxDB Query returned " + result + " which is more than threshold:"+expectedThreshold+", will mark build Unstable");
+                                loggerUtils.error("InfluxDB Query returned " + result + " which is more than threshold:"+expectedThreshold+", will mark build Unstable");
                                 run.setResult(hudson.model.Result.UNSTABLE);
                                 break;
                             } 
-                            logger.println("InfluxDB Query returned " + result + " which is more than threshold:"+expectedThreshold+", but build will not be marked as Unstable as per your configuration");
+                            loggerUtils.warn("InfluxDB Query returned " + result + " which is more than threshold:"+expectedThreshold+", but build will not be marked as Unstable as per your configuration");
                         } else {
-                            logger.println("InfluxDB Query returned " + result + " which is less than threshold:"+expectedThreshold);
+                            loggerUtils.info("InfluxDB Query returned " + result + " which is less than threshold:"+expectedThreshold);
                             break;
                         }
                     }
                 } catch (Exception e) {
-                    logger.println("Error running query:" + query.getCommand() + ", current retry:"+currentRetry+", max retries:"+retryCount+", message:" + e.getMessage());
+                    loggerUtils.error("Error running query:" + query.getCommand() + ", current retry:"+currentRetry+", max retries:"+retryCount+", message:" + e.getMessage());
                 }
                 currentRetry++;
             }
             if(currentRetry>retryCount) {
-                logger.println("Max number of retries "+retryCount+" reached without being able to compute result");
+                loggerUtils.error("Max number of retries "+retryCount+" reached without being able to compute result");
                 if (markUnstable) {
+                    loggerUtils.error("Marking build as unstable");
                     run.setResult(hudson.model.Result.UNSTABLE);
                 } else {
-                    logger.println("Not marking build as unstable");
+                    loggerUtils.warn("Not marking build as unstable");
                 }
             }
         } finally {
