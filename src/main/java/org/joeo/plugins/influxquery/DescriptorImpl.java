@@ -116,14 +116,22 @@ public final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
     // Added @POST to help protect against CSRF
     @POST
-    public FormValidation doTestConnection(@QueryParameter("influxURL") final String influxURL,
-            @QueryParameter("influxDB") final String influxDB, @QueryParameter("influxUser") final String influxUser,
+    public FormValidation doTestConnection(
+            @QueryParameter("influxURL") final String influxURL,
+            @QueryParameter("influxDB") final String influxDB, 
+            @QueryParameter("influxUser") final String influxUser,
             @QueryParameter("influxPWD") final Secret influxPWD) {
         // Admin permission check
         Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER);
         InfluxDB influxDBClient = null;
         try {
-            influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
+            if(influxUser == null || influxUser.length()==0) {
+                LOGGER.info("Using anonymous connection with url:{} and db:{}", influxURL, influxDB);
+                influxDBClient = InfluxDBFactory.connect(influxURL);
+            } else {
+                LOGGER.info("Using authenticated connection with url:{}, user:{}, db:{}", influxURL, influxUser, influxDB);
+                influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
+            }            
             Query query = new Query("show measurements", influxDB);
             LOGGER.info("Testing query from Jenkins Plugin with url:{}, db:{}", influxURL, influxDB);
             QueryResult result = influxDBClient.query(query);
