@@ -124,14 +124,8 @@ public final class DescriptorImpl extends BuildStepDescriptor<Builder> {
         // Admin permission check
         Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER);
         InfluxDB influxDBClient = null;
-        try {
-            if(influxUser == null || influxUser.length()==0) {
-                LOGGER.info("Using anonymous connection with url:{} and db:{}", influxURL, influxDB);
-                influxDBClient = InfluxDBFactory.connect(influxURL);
-            } else {
-                LOGGER.info("Using authenticated connection with url:{}, user:{}, db:{}", influxURL, influxUser, influxDB);
-                influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
-            }            
+        try {        
+            influxDBClient = InfluxDBUtils.getConnection(influxURL, influxDB, influxUser, influxPWD);
             Query query = new Query("show measurements", influxDB);
             LOGGER.info("Testing query from Jenkins Plugin with url:{}, db:{}", influxURL, influxDB);
             QueryResult result = influxDBClient.query(query);

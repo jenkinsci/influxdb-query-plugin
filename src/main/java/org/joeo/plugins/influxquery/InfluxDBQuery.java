@@ -29,7 +29,6 @@ import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
 import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -137,7 +136,7 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
         logger.println("Connecting to url:" + influxURL + ", db:" + influxDB+", user:"+ influxUser);
         InfluxDB influxDBClient = null;
         try {
-            influxDBClient = InfluxDBFactory.connect(influxURL, influxUser, Secret.toString(influxPWD));
+            influxDBClient = InfluxDBUtils.getConnection(influxURL, influxDB, influxUser, influxPWD);
             String influxQueryEnv = env.expand(influxQuery);
             Query query = new Query(influxQueryEnv, influxDB);
 
