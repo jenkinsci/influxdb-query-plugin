@@ -55,7 +55,7 @@ public class LoggerUtils {
     
     /**
      * Prefix with WARN:
-     * @param messag String 
+     * @param message String 
      */
     public void warn(String message) {
         stream.println("WARN:"+message);
