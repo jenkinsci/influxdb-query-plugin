@@ -1,16 +1,16 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
     <f:entry title="Check Name" field="checkName">
-        <f:textbox />
+        <f:textbox checkMethod="post" />
     </f:entry>
-    <f:entry title="Influx Query" field="influxQuery">
-        <f:textbox />
+    <f:entry title="InfluxDB Query" field="influxQuery">
+        <f:textbox checkMethod="post" />
     </f:entry>
 	<f:entry title="Expected threshold" field="expectedThreshold">
-        <f:textbox />
+        <f:textbox checkMethod="post"/>
     </f:entry>
     <f:entry title="Retry Count" field="retryCount">
-        <f:textbox default="5"/>
+        <f:textbox default="5" />
     </f:entry>
     <f:entry title="Retry Interval" field="retryInterval">
         <f:textbox default="30"/>

@@ -25,10 +25,10 @@
 package org.joeo.plugins.influxquery;
 
 import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.verb.POST;
@@ -36,7 +36,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hudson.Extension;
+import hudson.Util;
 import hudson.model.AbstractProject;
+import hudson.model.Item;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
@@ -69,7 +71,7 @@ public final class DescriptorImpl extends BuildStepDescriptor<Builder> {
     public String getDisplayName() {
         return "Query InfluxDB";
     }
-
+    
     // Allows for persisting global config settings in JSONObject
     @Override
     public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
@@ -148,6 +150,47 @@ public final class DescriptorImpl extends BuildStepDescriptor<Builder> {
                 	LOGGER.error(e.getMessage());
                 }
             }
+        }
+    }
+
+    @POST
+    public FormValidation doCheckCheckName(@QueryParameter String checkName, @AncestorInPath Item item) {
+        if (item == null) { // no context
+            return FormValidation.ok();
+        }
+        item.checkPermission(Item.CONFIGURE);
+        if (Util.fixEmptyAndTrim(checkName) == null) {
+            return FormValidation.error("Check name must not be empty");
+        } else {
+            return FormValidation.ok();
+        }
+    }
+
+    @POST
+    public FormValidation doCheckInfluxQuery(@QueryParameter String influxQuery, @AncestorInPath Item item) {
+        if (item == null) { // no context
+            return FormValidation.ok();
+        }
+        item.checkPermission(Item.CONFIGURE);
+        if (Util.fixEmptyAndTrim(influxQuery) == null) {
+            return FormValidation.error("InfluxDB query must not be empty");
+        } else {
+            return FormValidation.ok();
+        }
+    }
+
+    @POST
+    public FormValidation doCheckExpectedThreshold(@QueryParameter String expectedThreshold,
+            @AncestorInPath Item item) {
+        if (item == null) { // no context
+            return FormValidation.ok();
+        }
+        item.checkPermission(Item.CONFIGURE);
+        try {
+            Double.parseDouble(expectedThreshold);
+            return FormValidation.ok();
+        } catch (NumberFormatException ex) {
+            return FormValidation.error("expectedThreshold must be a double");
         }
     }
 }

@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.CheckForNull;
+
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -37,6 +39,7 @@ import org.kohsuke.stapler.DataBoundSetter;
 import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepMonitor;
@@ -48,8 +51,11 @@ import jenkins.tasks.SimpleBuildStep;
  * If result is above it marks build as unstable.
  */
 public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildStep {
+    @CheckForNull
     private String checkName;
+    @CheckForNull
     private String influxQuery;
+    @CheckForNull
     private double expectedThreshold;
     private int retryCount;
     private int retryInterval;
@@ -57,15 +63,24 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
     private boolean showResults;
 
     @DataBoundConstructor
-    public InfluxDBQuery(String influxQuery) {
-        this.influxQuery = influxQuery;
+    public InfluxDBQuery(@CheckForNull String checkName, @CheckForNull String influxQuery, @CheckForNull double expectedThreshold) {
+        this.checkName = Util.fixEmptyAndTrim(checkName);
+        this.influxQuery = Util.fixEmptyAndTrim(influxQuery);
+        this.expectedThreshold = expectedThreshold;
+    }
+    
+    /**
+     * @param checkName the checkName to set
+     */
+    public void setCheckName(@CheckForNull String checkName) {
+        this.checkName = Util.fixEmptyAndTrim(checkName);
     }
 
-    @DataBoundSetter public void setInfluxQuery(String influxQuery) {
-        this.influxQuery = influxQuery;
+    public void setInfluxQuery(@CheckForNull String influxQuery) {
+        this.influxQuery = Util.fixEmptyAndTrim(influxQuery);
     }
 
-    @DataBoundSetter public void setExpectedThreshold(double expectedThreshold) {
+    public void setExpectedThreshold(@CheckForNull double expectedThreshold) {
         this.expectedThreshold = expectedThreshold;
     }
 
@@ -83,6 +98,13 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
 
     @DataBoundSetter public void setShowResults(boolean showResults) {
         this.showResults = showResults;
+    }
+    
+    /**
+     * @return the checkName
+     */
+    public String getCheckName() {
+        return checkName;
     }
 
     public String getInfluxQuery() {
@@ -210,19 +232,4 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
             }
         }
     }
-
-    /**
-     * @return the checkName
-     */
-    public String getCheckName() {
-        return checkName;
-    }
-
-    /**
-     * @param checkName the checkName to set
-     */
-    @DataBoundSetter public void setCheckName(String checkName) {
-        this.checkName = checkName;
-    }
-
 }
