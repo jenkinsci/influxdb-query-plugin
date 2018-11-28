@@ -62,7 +62,7 @@ Then configure:
    It may also be a query against any metric in [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/) that is filled by a step of the build, for example if you run a Load Test with 
    [Apache JMeter](https://jmeter.apache.org) with an [InfluxDB Backend Listener](https://jmeter.apache.org/usermanual/component_reference.html#Backend_Listener), you could query the errors to fail a build:
    
-        select mean(avg) from jmeter where transaction = 'all'
+        select 100*sum(countError)/sum(count) from jmeter where application = 'mygreatapp' and buildNumber = '${BUILD_TAG}'
      
   * **Expected Threshold**  Threshold for the value returned by query result. If exceeded and if Mark Build Unstable is selected, the build will be marked unstable.
 
