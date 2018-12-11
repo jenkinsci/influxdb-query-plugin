@@ -172,16 +172,16 @@ public class InfluxDBQuery extends hudson.tasks.Builder implements SimpleBuildSt
                 }
                 try {
                     QueryResult influxQueryResult = influxDBClient.query(query);
-                    if (showResults) {
-                        loggerUtils.info("Results for query:"+influxQueryEnv);
-                        String emptyReturn = influxQueryResult.getResults().toString();
-                        if (emptyReturn.contains("series=null")) {
-                            queryRecordCount = 0;
-                            loggerUtils.warn("Query returned 0 records");
-                        } else {
-                            queryRecordCount = influxQueryResult.getResults().get(0).getSeries().get(0).getValues()
-                                    .size();
-                            loggerUtils.info("Query returned " + queryRecordCount + " records:");
+                    String emptyReturn = influxQueryResult.getResults().toString();
+                    if (emptyReturn.contains("series=null")) {
+                        queryRecordCount = 0;
+                        loggerUtils.warn("Query returned 0 records");
+                    } else {
+                        queryRecordCount = influxQueryResult.getResults().get(0).getSeries().get(0).getValues()
+                                .size();
+                        loggerUtils.info("Query returned " + queryRecordCount + " records:");
+                        if(showResults) {
+                            loggerUtils.info("Results for query:"+influxQueryEnv);
                             loggerUtils.info(""+influxQueryResult.getResults().get(0).getSeries().get(0));
                         }
                     }
