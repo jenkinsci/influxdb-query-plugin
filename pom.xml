@@ -9,7 +9,7 @@
     </parent>
     <groupId>org.joeo.plugins</groupId>
     <artifactId>influxdb-query</artifactId>
-    <version>1.2</version>
+    <version>1.3-SNAPSHOT</version>
     <packaging>hpi</packaging>
     <url>https://wiki.jenkins.io/display/JENKINS/InfluxDB+Query+Plugin</url>
     <properties>
@@ -101,7 +101,7 @@
   <connection>scm:git:ssh://github.com/jenkinsci/influxdb-query-plugin.git</connection>
   <developerConnection>scm:git:ssh://git@github.com/jenkinsci/influxdb-query-plugin.git</developerConnection>
   <url>https://github.com/jenkinsci/influxdb-query-plugin</url>
-    <tag>influxdb-query-1.2</tag>
+    <tag>influxdb-query-0.42</tag>
   </scm>
     <repositories>
         <repository>
