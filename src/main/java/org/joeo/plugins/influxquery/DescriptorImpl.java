@@ -126,14 +126,23 @@ public final class DescriptorImpl extends BuildStepDescriptor<Builder> {
         // Admin permission check
         Jenkins.getInstance().checkPermission(Jenkins.ADMINISTER);
         InfluxDB influxDBClient = null;
+
+	int numMeasurements = 0;
+
         try {        
             influxDBClient = InfluxDBUtils.getConnection(influxURL, influxDB, influxUser, influxPWD);
             Query query = new Query("show measurements", influxDB);
             LOGGER.info("Testing query from Jenkins Plugin with url:{}, db:{}", influxURL, influxDB);
             QueryResult result = influxDBClient.query(query);
-            int numMeasurements = result.getResults().get(0).getSeries().get(0).getValues().size();
-            LOGGER.info("Connection Successful. Found {} measurements", numMeasurements);
-            return FormValidation.ok("Connection Successful.  Found " + numMeasurements + " Measurements");
+	    String emptyReturn = result.getResults().toString();
+            if (emptyReturn.contains("series=null")) {
+                numMeasurements = 0;
+                LOGGER.warn("Query returned 0 records");
+	    } else {
+	        numMeasurements = result.getResults().get(0).getSeries().get(0).getValues().size();
+                LOGGER.info("Connection Successful. Found {} measurements", numMeasurements);
+	    }
+	    return FormValidation.ok("Connection Successful.  Found " + numMeasurements + " Measurements");
 
         } catch (Exception e) {
             LOGGER.error("Error testing connection with url({}), influxDB({}), influxUser({}), got error : {}", influxURL, influxDB,influxUser, 
